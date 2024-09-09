@@ -1,6 +1,9 @@
-<?php 
+<?php
 session_start();
-include 'koneksi.php'; 
+ob_start();
+include 'koneksi.php';
+include 'helpers/title.php';
+$title = getTitle($_GET['pg'] ?? 'Dashboard');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +56,7 @@ include 'koneksi.php';
                 <!-- Default box -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Title</h3>
+                        <h3 class="card-title"><?php echo $title ?></h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
