@@ -1,6 +1,6 @@
 <?php
 $user_id = $_GET['id_user'] ?? '';
-$queryUser = mysqli_query($koneksi, "SELECT * FROM user_levels
+$queryUser = mysqli_query($koneksi, "SELECT users.fullname, levels.level_name, user_levels.* FROM user_levels
 LEFT JOIN users ON users.id = user_levels.user_id
 LEFT JOIN levels ON levels.id = user_levels.level_id WHERE user_levels.user_id = '$user_id' 
 ORDER BY user_levels.id DESC");
@@ -31,10 +31,11 @@ ORDER BY user_levels.id DESC");
                     </a>
                     <a
                         class="btn btn-success btn-xs"
-                        href="?pg=tambah-user&edit=<?php echo $rowUser['id'] ?>"> Edit
+                        href="?pg=tambah-user-role&edit=<?php echo $rowUser['id'] ?>"> Edit
                     </a>
                     <a
-                        class="btn btn-danger btn-xs" onclick="return confirm('Apakah kamu mau menghapus data ini?')" href="?pg=tambah-user&delete=<?php echo $rowUser['id'] ?>">Delete
+                        class="btn btn-danger btn-xs" onclick="return confirm('Apakah kamu mau menghapus data ini?')"
+                        href="?pg=tambah-user-role&delete=<?php echo $rowUser['id'] ?>">Delete
                     </a>
                 </td>
             </tr>

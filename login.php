@@ -3,26 +3,40 @@ session_start();
 include 'koneksi.php';
 
 if (isset($_POST['submit'])) {
-    $email = $_POST['email'];
+    // Menangkap dan membersihkan input dari form
+    $email = mysqli_real_escape_string($koneksi, $_POST['email']);
     $password = sha1($_POST['password']);
 
+    // Melakukan query ke database
     $user = mysqli_query($koneksi, "SELECT * FROM users WHERE email ='$email'");
+    
+    if (!$user) {
+        die('Error: ' . mysqli_error($koneksi));
+    }
+    
     if (mysqli_num_rows($user) > 0) {
         $user = mysqli_fetch_assoc($user);
         if ($user['password'] == $password) {
+            // Menyimpan data user ke session
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['fullname'] = $user['fullname'];
-            header("location:index.php");
+            header("Location: index.php");
+            exit();
+        } else {
+            // Password salah
+            header("Location: login.php?error=login-gagal");
+            exit();
         }
     } else {
-        //jika tidak ada data user berdasarkan email
-        header("location:login.php?error=login-gagal");
+        // Email tidak ditemukan
+        header("Location: login.php?error=login-gagal");
+        exit();
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,11 +51,10 @@ if (isset($_POST['submit'])) {
     <!-- Theme style -->
     <link rel="stylesheet" href="assets/dist/css/adminlte.min.css">
 </head>
-
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="../../index2.html"><b>Admin</b>LTE</a>
+            <a href="#"><b>Admin</b>LTE</a>
         </div>
         <!-- /.login-logo -->
         <div class="card">
@@ -51,9 +64,9 @@ if (isset($_POST['submit'])) {
                 <?php } ?>
                 <p class="login-box-msg">Sign in to start your session</p>
 
-                <form action="#" method="post">
+                <form action="" method="post">
                     <div class="input-group mb-3">
-                        <input name="email" type="email" class="form-control" placeholder="Email">
+                        <input name="email" type="email" class="form-control" placeholder="Email" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -61,7 +74,7 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input name="password" type="password" class="form-control" placeholder="Password">
+                        <input name="password" type="password" class="form-control" placeholder="Password" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -97,5 +110,4 @@ if (isset($_POST['submit'])) {
     <!-- AdminLTE App -->
     <script src="assets/dist/js/adminlte.min.js"></script>
 </body>
-
 </html>

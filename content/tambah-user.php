@@ -6,7 +6,7 @@ if (isset($_POST['simpan'])) {
     $user_id = $_GET['id_user'] ?? '';
 
     $insert = mysqli_query($koneksi, "INSERT INTO users (fullname, email, password) VALUES ('$fullname', '$email', '$password')");
-    header("location:?pg=user-role&id_user=" . urlencode($user_id) . "&tambah=berhasil");
+    header("location:?pg=user&tambah=berhasil");
 }
 
 if (isset($_GET['delete'])) {
@@ -62,7 +62,7 @@ if (isset($_POST['edit'])) {
             <label for="">Password</label>
         </div>
         <div class="col-sm-6">
-            <input type="text"
+            <input type="password"
                 class="form-control"
                 name="password"
                 placeholder="password"
